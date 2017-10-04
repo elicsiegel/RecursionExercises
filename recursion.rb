@@ -89,6 +89,39 @@ def binary_search(arr, target)
     p arr[middle_index+1..-1]
     binary_search(arr[middle_index+1..-1], target) + middle_index + 1
   end
+end
 
+class Array
 
+  def merge_sort(&prc)
+    return self if self.length < 2 
+
+    prc ||= Proc.new { |x, y| x <=> y }
+
+    middle = self.length / 2 
+
+    left = self[0...middle]
+    right = self[middle..-1]
+
+    left = left.merge_sort(&prc)
+    right = right.merge_sort(&prc)
+
+    Array.merge(left, right, &prc)
+  end
+
+  private
+  def self.merge(left, right, &prc)
+    merged = [] 
+ 
+    until left.empty? || right.empty?
+      if prc.call(left[0], right[0]) == -1 
+        merged << left[0]
+        left.shift 
+      else
+        merged << right[0]
+        right.shift
+      end 
+    end 
+    merged + left + right 
+  end
 end
