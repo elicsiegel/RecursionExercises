@@ -91,7 +91,20 @@ def binary_search(arr, target)
   end
 end
 
+
 class Array
+
+  def quick_sort(&prc)
+    return self if self.length < 1 
+
+    prc ||= Proc.new { |x,y| x <=> y }
+
+    pivot = [self[0]]
+    left = self[1..-1].select { |el| prc.call(el, self.first) == -1 }
+    right = self[1..-1].select { |el| prc.call(el, self.first) == 1 }
+
+    left.quick_sort + pivot + right.quick_sort
+  end 
 
   def merge_sort(&prc)
     return self if self.length < 2 
